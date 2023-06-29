@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HEX64</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #333;
+      max-width: 100%;
+      word-wrap: break-word;
+    }
+  </style>
+  <script>
+    function converter() {
+      var inputText = document.getElementById("inputText").value;
+
+      // Transformar o texto em hexadecimal
+      var hex = "";
+      for (var i = 0; i < inputText.length; i++) {
+        hex += inputText.charCodeAt(i).toString(16);
+      }
+
+      // Transformar o hexadecimal em base64
+      var base64 = btoa(hex);
+
+      // Exibir o resultado
+      document.getElementById("result").textContent = base64;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Conversor HEX64</h1>
+
+    <label for="inputText">Digite o texto:</label>
+    <input type="text" id="inputText">
+    <button onclick="converter()">Converter</button>
+
+    <p id="result"></p>
+  </div>
+</body>
+</html>
+<!â€“By: Grafenea, on GitHub. //â€“>
