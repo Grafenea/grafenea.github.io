@@ -21,6 +21,8 @@
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      margin: 0 auto;
     }
     h1 {
       font-size: 2.5rem;
@@ -32,7 +34,6 @@
     }
     textarea {
       width: 100%;
-      max-width: 500px;
       height: 120px;
       padding: 0.5rem;
       margin-top: 1rem;
@@ -73,7 +74,7 @@
     <br>
     <label for="base64-output">Texto convertido em Base64:</label>
     <br>
-    <textarea id="base64-output" rows="4" cols="50" readonly></textarea>
+    <p id="base64-output"></p>
   </div>
 
   <script>
@@ -84,7 +85,7 @@
       const text = textInput.value;
       const base64 = btoa(text); // converte para Base64
 
-      base64Output.value = base64;
+      base64Output.textContent = base64;
     }
   </script>
 </body>
