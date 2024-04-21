@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Processador de Texto</title>
+<link rel="stylesheet" href="normalize.min.css">
+<style>
+   body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 0;
+    }
+    p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 0.5rem;
+      margin-top: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all ease-in-out 0.3s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+    #base64-output {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      word-break: break-all;
+    }
+</style>
+</head>
+<div class="container">
+<h1>Pass40</h1>
+  <textarea id="inputText" placeholder="Digite o texto aqui"></textarea>
+  <div class="button-container">
+    <input type="number" id="numberInput" placeholder="Digite o número aqui">
+    <button onclick="processar()">Processar</button>
+  </div>
+  <textarea id="resultText" class="result-box" placeholder="Resultado"></textarea>
+  <div class="button-container">
+    <button onclick="copiar()">Copiar</button>
+    <button onclick="baixar()">Baixar</button>
+  </div>
+</div>
+
+<script>
+function processar() {
+  const inputText = document.getElementById('inputText').value;
+  const number = parseInt(document.getElementById('numberInput').value);
+
+  let result = '';
+  let index = 0;
+
+  for (let i = 0; i < 40; i++) {
+    index = (index + number) % inputText.length;
+    result += inputText.charAt(index);
+    index++;
+  }
+
+  result = btoa(result);
+
+  for (let i = 0; i < number % 10; i++) {
+    result = rot13(result, number % 10);
+  }
+
+  const specialChars = "!#$%&()+,-./:;<=>?@[\\]_{}";
+  const reversedNumber = parseInt(number.toString().split('').reverse().join(''));
+  let specialCharsIndex = reversedNumber % specialChars.length;
+
+  for (let i = 0; i < specialChars.length; i++) {
+    if (i % 2 === 0 && specialCharsIndex < specialChars.length) {
+      result = result.slice(0, i * 5) + specialChars.charAt(specialCharsIndex) + result.slice(i * 5);
+      specialCharsIndex++;
+    }
+  }
+
+  const unitDigit = number % 10;
+  result = result.substring(0, 1) + unitDigit + result.substring(2);
+
+  document.getElementById('resultText').value = result.slice(0, 40);
+}
+
+function rot13(str, n) {
+  return str.replace(/[a-zA-Z]/g, function(c) {
+    let code = c.charCodeAt(0);
+    let offset = code < 91 ? 65 : 97;
+    return String.fromCharCode((code - offset + n) % 26 + offset);
+  });
+}
+
+function baixar() {
+  const result = document.getElementById('resultText').value;
+  const blob = new Blob([result], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'P40.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copiar() {
+  const result = document.getElementById('resultText').value;
+  navigator.clipboard.writeText(result);
+}
+</script>
+
+</body>
+</html>
