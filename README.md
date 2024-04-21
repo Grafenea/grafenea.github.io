@@ -1,10 +1,13 @@
 # grafenea.github.io
-Grafenea tools site.
+Site com algumas ferramentas da Grafenea
 
 # Pass88
-Text > Base64 > SHA-256 > Base64 > Output
+Texto > Base64 > SHA-256 > Base64 > Resultado
+
+# Pass40
+Texto > Seleção de caracteres > Base64 > ROT13 em alguns caracteres > Adição de símbolos > Exibir os primeiros 40 caracteres do resultado
 
 # HEX64
-Text > Hex > Base64 > Output
+Texto > Hex > Base64 > Resultado
 
 
