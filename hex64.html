@@ -12,7 +12,8 @@
     }
 
     .container {
-      max-width: 100%;
+      max-width: 600px; /* Limita a largura máxima da container */
+      margin: 20px auto; /* Centraliza a container */
       padding: 20px;
       background-color: #fff;
       border-radius: 4px;
@@ -23,29 +24,32 @@
     h1 {
       text-align: center;
       color: #333;
+      font-size: 24px; /* Ajusta o tamanho da fonte do título */
     }
 
     label {
       display: block;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 8px; /* Diminui a margem inferior */
       color: #555;
     }
 
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
+    input[type="password"] {
+      width: 100%; /* Mantém a largura total */
+      max-width: 400px; /* Define uma largura máxima para o input */
+      padding: 10px; /* Aumenta o padding */
+      font-size: 16px; /* Aumenta o tamanho da fonte */
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
+      margin: 0 auto; /* Centraliza o input */
     }
 
     button {
       display: block;
       width: 100%;
-      padding: 10px;
-      font-size: 16px;
+      padding: 10px; /* Mantém o padding */
+      font-size: 16px; /* Mantém o tamanho da fonte */
       font-weight: bold;
       background-color: #333;
       color: #fff;
@@ -56,16 +60,30 @@
     }
 
     button:hover {
-      background-color: #333;
+      background-color: #555; /* Muda a cor ao passar o mouse */
     }
 
     #result {
       margin-top: 20px;
-      font-size: 24px;
+      font-size: 18px; /* Diminui o tamanho da fonte do resultado */
       color: #333;
       max-width: 100%;
       word-wrap: break-word;
       padding: 10px;
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 20px; /* Ajusta o tamanho do título em telas pequenas */
+      }
+
+      input[type="password"], button {
+        font-size: 12px; /* Diminui o tamanho da fonte em telas pequenas */
+      }
+
+      #result {
+        font-size: 16px; /* Diminui o tamanho da fonte do resultado em telas pequenas */
+      }
     }
   </style>
   <script>
@@ -91,11 +109,10 @@
     <h1>Conversor HEX64</h1>
 
     <label for="inputText">Digite o texto:</label>
-    <input type="password" id="inputText">
+    <input type="password" id="inputText"> <!-- Mantido como input de password -->
     <button onclick="converter()">Converter</button>
 
     <p id="result"></p>
   </div>
 </body>
 </html>
-<!–By: Grafenea, on GitHub. //–>
