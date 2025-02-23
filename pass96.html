@@ -2,10 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pass96</title>
   <!-- Incluindo CryptoJS para o SHA-512 -->
   <script src="crypto-js.min.js"></script>
-  <link rel="stylesheet" href="normalize.min.css">
+  <link rel="normalize.min.css">
   <style>
     * {
       box-sizing: border-box;
@@ -19,6 +20,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      padding: 10px;
     }
     .container {
       text-align: center;
@@ -26,49 +28,69 @@
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
+      max-width: 90vw;
+      min-width: 300px;
       width: 100%;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-top: 0;
     }
     p {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     textarea {
       width: 100%;
-      height: 120px;
+      height: 100px;
       padding: 0.5rem;
       margin-top: 1rem;
       border-radius: 5px;
       border: 1px solid #ccc;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       font-size: 1rem;
+      resize: vertical;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 1rem;
     }
     button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
+      padding: 10px 15px;
       background-color: #333;
       color: #fff;
       border: none;
       border-radius: 5px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
-      transition: all ease-in-out 0.3s;
+      transition: background 0.3s;
+      width: auto;
+      min-width: 120px;
     }
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      background-color: #555;
     }
     pre {
       background: #eee;
       padding: 1rem;
       border-radius: 5px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-align: left;
       white-space: pre;
       overflow-x: auto;
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Ajusta os botões para ficarem um abaixo do outro no mobile */
+    @media (max-width: 600px) {
+      .button-group {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -77,10 +99,11 @@
     <h1>Pass96</h1>
     <p>Digite o texto para gerar o hash:</p>
     <textarea id="inputText" placeholder="Digite seu texto aqui"></textarea>
-    <br>
-    <button onclick="processar()">Processar</button>
-    <button onclick="copiar()">Copiar</button>
-    <button onclick="baixar()">Baixar</button>
+    <div class="button-group">
+      <button onclick="processar()">Processar</button>
+      <button onclick="copiar()">Copiar</button>
+      <button onclick="baixar()">Baixar</button>
+    </div>
     <h2>Resultado:</h2>
     <pre id="resultText"></pre>
   </div>
