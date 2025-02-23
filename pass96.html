@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pass96</title>
+  <!-- Incluindo CryptoJS para o SHA-512 -->
+  <script src="crypto-js.min.js"></script>
+  <link rel="stylesheet" href="normalize.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-top: 0;
+    }
+    p {
+      font-size: 1.1rem;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 0.5rem;
+      margin-top: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all ease-in-out 0.3s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+    pre {
+      background: #eee;
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-align: left;
+      white-space: pre;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pass96</h1>
+    <p>Digite o texto para gerar o hash:</p>
+    <textarea id="inputText" placeholder="Digite seu texto aqui"></textarea>
+    <br>
+    <button onclick="processar()">Processar</button>
+    <button onclick="copiar()">Copiar</button>
+    <button onclick="baixar()">Baixar</button>
+    <h2>Resultado:</h2>
+    <pre id="resultText"></pre>
+  </div>
+
+  <script>
+    function processar() {
+      const inputText = document.getElementById('inputText').value;
+      const hash = CryptoJS.SHA512(inputText).toString(CryptoJS.enc.Hex);
+
+      let asciiArt = 
+`╔════════════╗
+║+─[PASS96]─+║
+║────────────║
+║000000000000║
+║000000000000║
+║000000000000║
+║000000000000║
+║000000000000║
+║000000000000║
+║000000000000║
+║000000000000║
+╚════════════╝`;
+
+      let hashIndex = 0;
+      let resultArt = "";
+      for (let i = 0; i < asciiArt.length; i++) {
+        if (asciiArt[i] === '0' && hashIndex < hash.length) {
+          resultArt += hash[hashIndex];
+          hashIndex++;
+        } else {
+          resultArt += asciiArt[i];
+        }
+      }
+
+      document.getElementById('resultText').textContent = resultArt;
+    }
+
+    function copiar() {
+      const result = document.getElementById('resultText').textContent;
+      navigator.clipboard.writeText(result)
+        .then(() => alert('Copiado para a área de transferência!'))
+        .catch(err => alert('Erro ao copiar: ' + err));
+    }
+
+    function baixar() {
+      const result = document.getElementById('resultText').textContent;
+      const blob = new Blob([result], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'PASS96.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
