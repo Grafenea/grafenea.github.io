@@ -36,12 +36,6 @@
             font-size: 1.2rem;
             display: block;
         }
-        .requirement {
-            font-size: 0.85rem;
-            color: #e74c3c;
-            margin-top: 5px;
-            display: none;
-        }
         .input-container {
             position: relative;
             width: 100%;
@@ -185,14 +179,12 @@
             <input type="password" id="master-password" placeholder="Digite sua senha mestre">
             <span class="eye-icon" onclick="toggleVisibility('master-password', this)">👁</span>
         </div>
-        <div id="master-password-req" class="requirement">A senha mestre deve ter pelo menos 10 caracteres</div>
         
         <label for="salt">Salt:</label>
         <div class="input-container">
             <input type="password" id="salt" placeholder="Digite o salt">
             <span class="eye-icon" onclick="toggleVisibility('salt', this)">👁</span>
         </div>
-        <div id="salt-req" class="requirement">O salt deve ter pelo menos 9 caracteres</div>
         
         <label for="extra-data">Mais dados (opcional):</label>
         <div class="radio-group">
@@ -239,13 +231,10 @@
             const textContainer = document.getElementById('text-input-container');
             const fileContainer = document.getElementById('file-input-container');
             const masterPasswordInput = document.getElementById('master-password');
-            const saltInput = document.getElementById('salt');
             const generateBtn = document.getElementById('generate-btn');
-            const extraText = document.getElementById('extra-text');
             
-            // Validação em tempo real dos campos
+            // Validação em tempo real - apenas verifica se a senha mestre não está vazia
             masterPasswordInput.addEventListener('input', validateInputs);
-            saltInput.addEventListener('input', validateInputs);
             
             textOption.addEventListener('change', function() {
                 if (this.checked) {
@@ -260,40 +249,14 @@
                     textContainer.classList.add('hidden');
                 }
             });
-            
-            // Ocultar mensagens de requisito quando clicar em qualquer lugar da página
-            document.addEventListener('click', function(event) {
-                const masterPasswordReq = document.getElementById('master-password-req');
-                const saltReq = document.getElementById('salt-req');
-                
-                // Se o clique não foi no campo de senha mestre, ocultar mensagem
-                if (event.target !== masterPasswordInput && masterPasswordInput.value.length >= 10) {
-                    masterPasswordReq.style.display = 'none';
-                }
-                
-                // Se o clique não foi no campo de salt, ocultar mensagem
-                if (event.target !== saltInput && saltInput.value.length >= 9) {
-                    saltReq.style.display = 'none';
-                }
-            });
-            
-            // Mostrar requisitos quando o campo está em foco
-            masterPasswordInput.addEventListener('focus', function() {
-                document.getElementById('master-password-req').style.display = 'block';
-            });
-            
-            saltInput.addEventListener('focus', function() {
-                document.getElementById('salt-req').style.display = 'block';
-            });
         });
 
-        // Validar se os campos atendem aos requisitos
+        // Validar se a senha mestre não está vazia
         function validateInputs() {
             const masterPassword = document.getElementById('master-password').value;
-            const salt = document.getElementById('salt').value;
             const generateBtn = document.getElementById('generate-btn');
             
-            if (masterPassword.length >= 10 && salt.length >= 9) {
+            if (masterPassword.length > 0) {
                 generateBtn.disabled = false;
             } else {
                 generateBtn.disabled = true;
@@ -385,10 +348,21 @@
             }
         }
 
+        // Função para processar o salt conforme as novas regras
+        function processSalt() {
+            const saltInput = document.getElementById('salt').value;
+            const defaultSalt = "GrafeneaPass100";
+            
+            if (!saltInput) {
+                return defaultSalt;
+            } else {
+                return saltInput + defaultSalt;
+            }
+        }
+
         // Função principal para gerar senha
         async function generatePassword() {
             const masterPassword = document.getElementById('master-password').value;
-            const salt = document.getElementById('salt').value;
             const dataType = document.querySelector('input[name="data-type"]:checked').value;
             const statusMessage = document.getElementById('status-message');
             const passwordOutput = document.getElementById('generated-password');
@@ -396,14 +370,9 @@
             const passwordEyeIcon = document.getElementById('password-eye-icon');
             const fletcher16Result = document.getElementById('fletcher16-result');
             
-            // Validar comprimentos mínimos
-            if (masterPassword.length < 10) {
-                showStatus("A senha mestre deve ter pelo menos 10 caracteres", "error");
-                return;
-            }
-            
-            if (salt.length < 9) {
-                showStatus("O salt deve ter pelo menos 9 caracteres", "error");
+            // Validar se a senha mestre não está vazia
+            if (masterPassword.length === 0) {
+                showStatus("A senha mestre não pode estar vazia", "error");
                 return;
             }
 
@@ -418,13 +387,16 @@
 
                 showStatus("Gerando senha segura com Argon2...", "info");
                 
+                // Processar o salt conforme as novas regras
+                const finalSalt = processSalt();
+                
                 // Gerar o hash Argon2
-                const encodedSalt = new TextEncoder().encode(salt);
+                const encodedSalt = new TextEncoder().encode(finalSalt);
                 const hash = await argon2.hash({
                     pass: new TextEncoder().encode(combinedPassword),
                     salt: encodedSalt,
-                    time: 5,
-                    mem: 7168,
+                    time: 8,
+                    mem: 8192,
                     parallelism: 1,
                     type: argon2.ArgonType.Argon2id,
                     hashLen: 200,
