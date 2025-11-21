@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conversor Base64</title>
-  <link rel="stylesheet" href="normalize.min.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +12,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
     .container {
       text-align: center;
@@ -21,7 +21,9 @@
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
+      max-width: 600px;
+      width: 100%;
+      max-width: 450px;
       margin: 0 auto;
     }
     h1 {
@@ -32,15 +34,22 @@
       margin-top: 1rem;
       font-size: 1.2rem;
     }
-    input[type="password"] {
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-size: 1rem;
+      text-align: left;
+    }
+    input[type="password"], select {
       width: 100%;
       height: 40px;
       padding: 0.5rem;
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       border-radius: 5px;
-      border: none;
+      border: 1px solid #ccc;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       font-size: 1rem;
+      box-sizing: border-box;
     }
     button {
       margin-top: 1rem;
@@ -59,36 +68,188 @@
     }
     #base64-output {
       margin-top: 1rem;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       word-break: break-all;
+      text-align: left;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      min-height: 50px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Conversor Base64</h1>
+    
     <label for="text-input">Digite o texto:</label>
-    <br>
     <input type="password" id="text-input" />
-    <br>
+    
+    <label for="charset-select">Codificação de caracteres:</label>
+    <select id="charset-select">
+      <option value="latin1">Latin-1 (ISO-8859-1)</option>
+      <option value="utf8" selected>UTF-8</option>
+      <option value="utf16le">UTF-16LE</option>
+      <option value="utf32le">UTF-32LE</option>
+    </select>
+    
+    <label for="encoding-select">Tipo de codificação:</label>
+    <select id="encoding-select">
+      <option value="standard">Standard (RFC 4648)</option>
+      <option value="itoa64">itoa64</option>
+      <option value="z64">z64</option>
+      <option value="radix64">Radix-64 (RFC 4880)</option>
+      <option value="uuencoding">Uuencoding</option>
+      <option value="xxencoding">Xxencoding</option>
+      <option value="binhex">BinHex</option>
+      <option value="atom128">Atom128</option>
+      <option value="megan35">Megan35</option>
+      <option value="zong22">Zong22</option>
+      <option value="hazz15">Hazz15</option>
+    </select>
+    
     <button onclick="convertToBase64()">Converter para Base64</button>
-    <br>
-    <label for="base64-output">Texto convertido em Base64:</label>
-    <br>
-    <p id="base64-output"></p>
+    
+    <label for="base64-output">Texto convertido:</label>
+    <div id="base64-output"></div>
   </div>
 
   <script>
+    const alphabets = {
+      standard: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+      itoa64: './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+      z64: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-',
+      radix64: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+      atom128: '/128GhIoPQROSTeUbADfgHijKLM+n0pFWXY456xyzB7=39VaqrstJklmNuZvwcdEC',
+      megan35: '3GHIJKLMNOPQRSTUb=cdefghijklmnopWXYZ/12+406789VaqrstuvwxyzABCDEF5',
+      zong22: 'ZKj9n+yf0wDVX1s/5YbdxSo=ILaUpPBCHg8uvNO4klm6iJGhQ7eFrWczAMEq3RTt2',
+      hazz15: 'HNO4klm6ij9n+J2hyf0gzA8uvwDEq3X1Q7ZKeFrWcVTts/MRGYbdxSo=ILaUpPBC'
+    };
+
+    function stringToBytes(str, charset) {
+      if (charset === 'utf8') {
+        const encoder = new TextEncoder();
+        return encoder.encode(str);
+      } else if (charset === 'utf16le') {
+        const bytes = [];
+        for (let i = 0; i < str.length; i++) {
+          const code = str.charCodeAt(i);
+          bytes.push(code & 0xFF);
+          bytes.push((code >> 8) & 0xFF);
+        }
+        return new Uint8Array(bytes);
+      } else if (charset === 'utf32le') {
+        const bytes = [];
+        for (let i = 0; i < str.length; i++) {
+          const code = str.codePointAt(i);
+          bytes.push(code & 0xFF);
+          bytes.push((code >> 8) & 0xFF);
+          bytes.push((code >> 16) & 0xFF);
+          bytes.push((code >> 24) & 0xFF);
+          if (code > 0xFFFF) i++;
+        }
+        return new Uint8Array(bytes);
+      } else {
+        const bytes = [];
+        for (let i = 0; i < str.length; i++) {
+          bytes.push(str.charCodeAt(i) & 0xFF);
+        }
+        return new Uint8Array(bytes);
+      }
+    }
+
+    function encodeBase64Custom(bytes, alphabet) {
+      let result = '';
+      const len = bytes.length;
+      
+      for (let i = 0; i < len; i += 3) {
+        const b1 = bytes[i];
+        const b2 = i + 1 < len ? bytes[i + 1] : 0;
+        const b3 = i + 2 < len ? bytes[i + 2] : 0;
+        
+        const enc1 = b1 >> 2;
+        const enc2 = ((b1 & 3) << 4) | (b2 >> 4);
+        const enc3 = ((b2 & 15) << 2) | (b3 >> 6);
+        const enc4 = b3 & 63;
+        
+        result += alphabet[enc1] + alphabet[enc2];
+        result += (i + 1 < len) ? alphabet[enc3] : '=';
+        result += (i + 2 < len) ? alphabet[enc4] : '=';
+      }
+      
+      return result;
+    }
+
+    function uuencode(bytes) {
+      let result = '';
+      for (let i = 0; i < bytes.length; i += 3) {
+        const chunk = bytes.slice(i, i + 3);
+        const len = chunk.length;
+        
+        result += String.fromCharCode(32 + len);
+        
+        for (let j = 0; j < len; j += 3) {
+          const b1 = chunk[j] || 0;
+          const b2 = chunk[j + 1] || 0;
+          const b3 = chunk[j + 2] || 0;
+          
+          result += String.fromCharCode(32 + (b1 >> 2));
+          result += String.fromCharCode(32 + (((b1 & 3) << 4) | (b2 >> 4)));
+          result += String.fromCharCode(32 + (((b2 & 15) << 2) | (b3 >> 6)));
+          result += String.fromCharCode(32 + (b3 & 63));
+        }
+      }
+      return result;
+    }
+
+    function xxencode(bytes) {
+      const alphabet = '+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      return encodeBase64Custom(bytes, alphabet);
+    }
+
+    function binhex(bytes) {
+      const alphabet = '!"#$%&\'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`abcdefhijklmpqr';
+      return encodeBase64Custom(bytes, alphabet);
+    }
+
     function convertToBase64() {
       const textInput = document.getElementById('text-input');
       const base64Output = document.getElementById('base64-output');
+      const charsetSelect = document.getElementById('charset-select');
+      const encodingSelect = document.getElementById('encoding-select');
 
       const text = textInput.value;
-      const base64 = btoa(text); // converte para Base64
+      if (!text) {
+        base64Output.textContent = '';
+        return;
+      }
 
-      base64Output.textContent = base64;
+      const charset = charsetSelect.value;
+      const encoding = encodingSelect.value;
+      
+      let result = '';
+
+      try {
+        if (encoding === 'uuencoding') {
+          const bytes = stringToBytes(text, charset);
+          result = uuencode(bytes);
+        } else if (encoding === 'xxencoding') {
+          const bytes = stringToBytes(text, charset);
+          result = xxencode(bytes);
+        } else if (encoding === 'binhex') {
+          const bytes = stringToBytes(text, charset);
+          result = binhex(bytes);
+        } else {
+          const bytes = stringToBytes(text, charset);
+          const alphabet = alphabets[encoding] || alphabets.standard;
+          result = encodeBase64Custom(bytes, alphabet);
+        }
+
+        base64Output.textContent = result;
+      } catch (error) {
+        base64Output.textContent = 'Erro ao converter: ' + error.message;
+      }
     }
   </script>
 </body>
 </html>
-<!–By: Grafenea, on GitHub. //–>
