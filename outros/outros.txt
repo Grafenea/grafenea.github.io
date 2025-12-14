@@ -13,3 +13,5 @@ PasswordMaker: http://sourceforge.net/projects/passwordmaker
 passwdhash: https://fpunktk.de/project-passwdhash.html
 
 PwdHash: https://github.com/collinjackson/pwdhash-website
+
+KeeWeb: https://github.com/keeweb/keeweb
