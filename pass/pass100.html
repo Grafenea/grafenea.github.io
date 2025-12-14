@@ -210,6 +210,20 @@
             </div>
         </div>
         
+        <div style="display:flex;justify-content:center;gap:30px;margin-top:1rem;">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-weight:bold;">Intera&ccedil;&otilde;es</span>
+                <input type="number" id="argon-time" value="8" min="5" max="99"
+                       style="width:80px;text-align:center;">
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-weight:bold;">Mem&oacute;ria RAM (MB)</span>
+                <input type="number" id="argon-mem" value="8" min="7" max="99"
+                       style="width:80px;text-align:center;">
+            </div>
+        </div>
+
+
         <button id="generate-btn" onclick="generatePassword()">Gerar Senha</button>
         
         <div class="password-result-container">
@@ -369,7 +383,18 @@
             const copyBtn = document.getElementById('copy-btn');
             const passwordEyeIcon = document.getElementById('password-eye-icon');
             const fletcher16Result = document.getElementById('fletcher16-result');
-            
+            let timeParam = parseInt(document.getElementById('argon-time').value) || 8;
+            let memParam  = parseInt(document.getElementById('argon-mem').value)  || 8;
+
+            // limites
+            timeParam = Math.min(Math.max(timeParam, 5), 99);
+            memParam  = Math.min(Math.max(memParam, 7), 99);
+
+            // Converter M informado (ex: 8) para MiB
+            const memMiB = memParam * 1024;
+
+
+
             // Validar se a senha mestre não está vazia
             if (masterPassword.length === 0) {
                 showStatus("A senha mestre não pode estar vazia", "error");
@@ -395,8 +420,8 @@
                 const hash = await argon2.hash({
                     pass: new TextEncoder().encode(combinedPassword),
                     salt: encodedSalt,
-                    time: 8,
-                    mem: 8192,
+                    time: timeParam,
+                    mem: memMiB,
                     parallelism: 1,
                     type: argon2.ArgonType.Argon2id,
                     hashLen: 200,
