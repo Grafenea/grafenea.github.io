@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="A stateless Password Manager." />
+    <meta name="theme-color" content="#D24317" />
+    <base href="./" />
+    
+<script type="module">
+import init, * as bindings from './rustedlesspass-web.js';
+const wasm = await init('./rustedlesspass-web_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+    
+    
+    
+    <link rel="manifest" href="./manifest.json" />
+    <script>
+      // register ServiceWorker
+      window.onload = () => {
+        "use strict";
+
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./service_worker.js");
+        }
+      };
+    </script>
+
+    <link href="assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="assets/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="assets/fontawesome/css/solid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./pico.orange.min.css" integrity="sha384-8U/6TlWQdwz+nvs+o6g/Qx9iW5WG4rFo6QOtithy1KMaLSAvuJd3ylQj+KKZc37k"/>
+    <link rel="stylesheet" href="./index.css" integrity="sha384-k8FEfMk39WIhvCWOg1n5xvf76DlbNLYIPW5Ti4KikpQv2VnpnMxKpWEbZIQos7wI"/>
+    <link
+      rel="icon"
+      href="assets/icons/maskable_icon_x512.ico"
+      type="image/x-icon"
+    />
+    <title>RustedLessPass</title>
+  <link rel="modulepreload" href="./rustedlesspass-web.js" crossorigin="anonymous" integrity="sha384-VYsA3YW0t+xWxkjGp8ExilYI+hAa51CySH24tdQV0+2yg8hpTVCa34jkhUD9JVW0"><link rel="preload" href="./rustedlesspass-web_bg.wasm" crossorigin="anonymous" integrity="sha384-H7L3FwVnxgaaTqoFLOung9fFJe4KZ/x39alYnK7CWfDhBFroTaEgwvJkwyIoueEp" as="fetch" type="application/wasm"></head>
+</html>

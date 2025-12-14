@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/ico" href="../favicon.ico">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Outros</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Tema Antigo (Desktop) */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #000;
+        color: #000;
+        padding: 20px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        background-color: #000;
+        padding: 10px;
+      }
+
+      .logo {
+        float: left;
+        height: 45px;
+        width: 45px;
+      }
+
+      .title {
+        font-size: 18px;
+        color: #ffffff;
+        font-family: Verdana, Geneva, sans-serif;
+      }
+
+      .title a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      main {
+        margin-top: 20px;
+      }
+
+      .text {
+        font-size: 16px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul li {
+        margin: 5px 0;
+      }
+
+      ul li a {
+        text-decoration: none;
+        font-size: 16px;
+        color: #FFD700;
+        padding: 5px;
+        transition: background 0.3s;
+      }
+
+      ul li a:hover {
+        background: #FFD700;
+        color: black;
+      }
+
+      /* Tema Novo (Mobile) */
+      @media (max-width: 600px) {
+        body {
+          background-color: #000;
+          color: #FFD700;
+          text-align: center;
+        }
+
+        header {
+          flex-direction: column;
+          text-align: center;
+          background-color: #000;
+          border-radius: 10px;
+        }
+
+        .logo {
+          margin-bottom: 10px;
+          height: 50px;
+          width: auto;
+        }
+
+        .title {
+          font-size: 22px;
+        }
+
+        .text {
+          font-size: 18px;
+          font-weight: bold;
+          display: block;
+          margin-bottom: 10px;
+        }
+
+        ul li {
+          margin: 10px 0;
+        }
+
+        ul li a {
+          display: block;
+          width: 100%;
+          text-align: center;
+          background: none;
+          color: #FFD700;
+          padding: 10px 15px;
+          border: 1px solid #FFD700;
+          border-radius: 5px;
+          transition: background 0.3s;
+        }
+
+        ul li a:hover {
+          background: #FFD700;
+          color: #000;
+        }
+      }
+
+      hr {
+            border: none;
+            height: 2px;
+            background-color: white;
+            margin-top: 3px;
+            padding-top: 3px;
+        }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><span class="title">Outros</span></h1>
+    </header>
+    <main>
+      <ul>
+        <li><a href="rustedlesspass/index.html">RustedLessPass</a></li>
+        <li><a href="spectre/index.html">Spectre</a></li>
+        <li><a href="uniquepasswordbuilder/index.html">UniquePasswordBuilder</a></li>
+        <li><a href="cockatoo/index.html">COCKATOO</a></li>
+        <li><a href="https://pashword.app/">Pashword</a></li>
+        <li><a href="passwordmaker/index.html">PasswordMaker</a></li>
+        <li><a href="passwdhash/index.html">passwdhash</a></li>
+        <li><a href="pwdhash/index.html">PwdHash</a></li>
+      </ul>
+      <br>
+      <hr>
+      <br>
+      <ul><li><a href="outros.txt">Source Codes</a></li></ul>
+    </main>
+  </body>
+</html>
+

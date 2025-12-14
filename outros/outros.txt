@@ -1,0 +1,15 @@
+RustedLessPass: https://github.com/RustedLessPass/RustedLessPass
+
+Spectre: https://gitlab.com/spectre.app/web/
+
+UniquePasswordBuilder: https://github.com/paulgreg/UniquePasswordBuilder
+
+COCKATOO: https://cctoo.org/cockatoo.zip
+
+Pashword: https://github.com/pashword/pashword
+
+PasswordMaker: http://sourceforge.net/projects/passwordmaker
+
+passwdhash: https://fpunktk.de/project-passwdhash.html
+
+PwdHash: https://github.com/collinjackson/pwdhash-website

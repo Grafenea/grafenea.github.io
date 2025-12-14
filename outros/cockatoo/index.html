@@ -1,0 +1,97 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Cockatoo</title>
+    <meta id="vp" name="viewport" content="height=700">
+    <style>
+      .dark {
+        background: linear-gradient(135deg, #606062 0%, #5A5A5C 49%, #585858 50%, #989898 100%);
+        border: 2px inset #A0A0A0;
+        text-shadow: -1px -1px 2px #404040, 1px 1px 0px #B0B0B0;
+        color: white;
+      }
+      .light {
+        background: linear-gradient(#F8F8F8 0%, #FFFFFF 33%, #FEFEFE 66%, #F4F4F4 100%);
+        border: 2px outset #404040;
+      }
+      .darkbutton {
+        box-shadow: inset -1px -1px 1px 0px #D0D0D0;
+        border-radius: 5px;
+        background: linear-gradient(135deg, #505050 0%, #707070 33%, #808080 66%, #A0A0A0 100%);
+        border: 1px inset #202020;
+        color: black;
+        text-shadow: -1px -1px 2px #D0D0D0, 1px 1px 0px #606060;
+      }
+      .darkbutton:hover {
+        background: linear-gradient(135deg, #606060 0%, #808080 33%, #909090 66%, #B0B0B0 100%);
+      }
+      .darkbutton:active {
+        box-shadow: inset -1px -1px 1px 0px #808080;
+        position: relative;
+        top: 1px;
+        left: -1px;
+        border: 1px solid #202020;
+      }
+      .lightbutton {
+        box-shadow: inset 1px 1px 2px 1px #F0F0F0;
+        border-radius: 5px;
+        background: linear-gradient(#F0F0F0 0%, #FFFFFF 20%, #F0F0F0 80%, #D0D0D0 100%);
+        border: 1px outset #202020;
+        color: #F4F4F4;
+        text-shadow: -1px -1px 1px #606060, -1px 1px 1px #606060, 1px -1px 1px #606060, 1px 1px 0px #202020;
+      }
+      .lightbutton:hover {
+        background: linear-gradient(#F0F0F0 0%, #FFFFFF 33%, #F0F0F0 66%, #C0C0C0 100%);
+      }
+      .lightbutton:active {
+        background: linear-gradient(#F0F0F0 0%, #F8F8F8 33%, #E8E8E8 66%, #C0C0C0 100%);
+        box-shadow: inset 0px 0px 1px 1px #A0A0A0;
+        position: relative;
+        top: 1px;
+        left: 0px;
+        border: 1px solid #202020;
+      }
+      input {
+        font-size: 14pt;
+        border: 2px solid #B0B0B0;
+        border-radius: 2px;
+        text-align: center;
+        box-sizing: border-box;
+        color: gray;
+      }
+      svg {
+        display: none;
+        background: white;
+        border: 2px solid #B0B0B0;
+        border-radius: 2px;
+        margin-top: 16px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body style="margin:0; padding:0; min-width:416px; min-height:192px">
+    <center>
+      <div id="plate" class="light" style="width:416px; font-family:'Segoe UI', Tahoma, sans-serif; font-size:17pt; font-weight:bold; vertical-align:middle">
+        <div style="margin-top:12px; margin-left:16px; margin-right:16px; height:32px">
+          <span style="float:left">Site * : <input type="text" id="site" value="enter name" maxlength="48" size="10" style="width:135px"/></span>
+          <span style="float:right">Salt : <input type="text" id="salt" value="optional" maxlength="48" size="5" style="width:90px"/></span>
+        </div>
+        <svg id="drawings" width="380px" height="380px"></svg>
+        <div id="passpart" style="display:block; margin-top:12px;  margin-left:16px; margin-right:16px; height:32px">
+          <span style="float:left">Password * : <input type="text" id="password" value="strong only!" maxlength="48" size="9" style="width:126px"/></span>
+          <span style="float:right"><label>[<input type="checkbox" id="revealer"/>visible]</label></span>
+        </div>
+        <hr style="border:1px outset #A0A0A0; height:0; margin-top:16px; margin-bottom:16px"/>
+        <div style="margin:16px; margin-left:16px; margin-right:16px; margin-bottom:0px; height:70px">
+          <span style="float:left"><button id="reset" title="Reset the gesture" class="lightbutton" style="height:54px; width:149px; font-family: Arial, Helvetica, sans-serif; font-size:20pt; font-weight:bold; vertical-align:bottom; display:inline-block; cursor:pointer; text-decoration:none; margin:0; padding:0">RESET</button></span>
+          <span style="position:relative"><button id="cockatoo" title="Expand/Shrink" class="lightbutton" style="height:54px; width:54px; padding:0"><img id="cockimage" src="icon128b.png" align="center" style="margin:0px 0px; height:45px; width:45px;"/></button></span>
+          <span style="float:right"><button id="enter" title="Produce the site password" class="lightbutton" style="height:54px; width:149px; font-family: Arial, Helvetica, sans-serif; font-size:20pt; font-weight:bold; vertical-align:bottom; display:inline-block; cursor:pointer; text-decoration:none; margin:0; padding:0">ENTER</button></span>
+        </div>
+      </div>
+      <script src="scrypt.js" charset="UTF-8"></script>
+      <script src="webint.js" charset="UTF-8"></script>
+      <script src="cockatoo.js" charset="UTF-8"></script>
+    </center>
+  </body>
+</html>
