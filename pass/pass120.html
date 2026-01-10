@@ -89,9 +89,12 @@
           bytes.push(hexString.charCodeAt(i));
         }
         
-        // Padding para múltiplo de 4
-        while (bytes.length % 4 !== 0) {
-          bytes.push(0);
+        // Calcula padding necessário
+        const paddingNeeded = (4 - (bytes.length % 4)) % 4;
+        
+        // Adiciona padding com espaços (código ASCII 32) ao invés de zeros
+        for (let i = 0; i < paddingNeeded; i++) {
+          bytes.push(32);
         }
         
         let result = '';
@@ -127,16 +130,22 @@
           // Calcula SHA3-384 com saída em hexadecimal
           const hexOutput = sha3_384(inputText);
           
-          // Debug: mostra o hash
+          // Debug: mostra o hash e tamanho
+          console.log('Input:', inputText);
           console.log('SHA3-384:', hexOutput);
+          console.log('Hash length:', hexOutput.length);
           
           // Converte para Base85 Z85
           const base85Output = encodeZ85(hexOutput);
           
+          console.log('Base85:', base85Output);
+          console.log('Base85 length:', base85Output.length);
+          
           // Exibe o resultado
-          document.getElementById('output').innerHTML = base85Output;
+          document.getElementById('output').textContent = base85Output;
         } catch (error) {
           document.getElementById('output').innerHTML = 'Erro na conversão: ' + error.message;
+          console.error(error);
         }
       }
       
