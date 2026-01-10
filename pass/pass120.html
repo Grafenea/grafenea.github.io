@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass120</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 1rem;
+      }
+      .container {
+        text-align: center;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-top: 0;
+      }
+      p {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+      }
+      input[type="text"], input[type="password"] {
+        width: 100%;
+        max-width: 500px;
+        padding: 0.5rem;
+        margin-top: 1rem;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+      }
+      button {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all ease-in-out 0.3s;
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      }
+      #output {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        word-break: break-all;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        min-height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pass120</h1>
+      <p>Para sua segurança, use 6 palavras ou mais!</p>
+      <input id="text-input" type="password" placeholder="Digite o texto aqui">
+      <button id="convert-button" onclick="convertText()">Converter</button>
+      <p id="output"></p>
+    </div>
+    <script src="../static/js/sha3.min.js"></script>
+    <script>
+      // Implementação Base85 Z85 (ZeroMQ)
+      const Z85_ENCODER = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#";
+      
+      function encodeZ85(hexString) {
+        // Trata o hexString como texto ASCII e converte para Base85
+        const bytes = [];
+        for (let i = 0; i < hexString.length; i++) {
+          bytes.push(hexString.charCodeAt(i));
+        }
+        
+        // Padding para múltiplo de 4
+        while (bytes.length % 4 !== 0) {
+          bytes.push(0);
+        }
+        
+        let result = '';
+        for (let i = 0; i < bytes.length; i += 4) {
+          // Converte 4 bytes em um número de 32 bits
+          let value = (bytes[i] * 16777216) +
+                      (bytes[i + 1] * 65536) +
+                      (bytes[i + 2] * 256) +
+                      bytes[i + 3];
+          
+          // Converte para 5 caracteres Base85
+          let encoded = '';
+          for (let j = 0; j < 5; j++) {
+            encoded = Z85_ENCODER[value % 85] + encoded;
+            value = Math.floor(value / 85);
+          }
+          result += encoded;
+        }
+        
+        return result;
+      }
+
+      function convertText() {
+        // Obtém o texto de entrada
+        const inputText = document.getElementById('text-input').value;
+        
+        if (!inputText) {
+          document.getElementById('output').innerHTML = 'Por favor, digite um texto!';
+          return;
+        }
+
+        try {
+          // Calcula SHA3-384 com saída em hexadecimal
+          const hexOutput = sha3_384(inputText);
+          
+          // Debug: mostra o hash
+          console.log('SHA3-384:', hexOutput);
+          
+          // Converte para Base85 Z85
+          const base85Output = encodeZ85(hexOutput);
+          
+          // Exibe o resultado
+          document.getElementById('output').innerHTML = base85Output;
+        } catch (error) {
+          document.getElementById('output').innerHTML = 'Erro na conversão: ' + error.message;
+        }
+      }
+      
+      // Permite converter com Enter
+      document.getElementById('text-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          convertText();
+        }
+      });
+    </script>
+  </body>
+</html>
